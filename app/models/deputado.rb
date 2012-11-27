@@ -9,7 +9,13 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  uri_id     :integer
+#  twitter    :string(255)
 #
+
+# Afazeres
+# Usar multiplas paginas simultaneas (Typhoeus)
+# localizar e adicionar email
+# => <Mechanize::Page::Link "dep.guilhermecampos@camara.leg.br" "mailto:dep.guilhermecampos@camara.leg.br">
 
 class Deputado < ActiveRecord::Base
   attr_accessible :email, :facebook, :nome, :uri_id
@@ -63,7 +69,9 @@ class Deputado < ActiveRecord::Base
 
 	  page = @agent.get("#{url_dep}")
 
+	  @facebook = ""
 	  @facebook = page.link_with(:text => 'Facebook').uri.to_s if page.link_with(:text => 'Facebook')
+	  puts @facebook
 	  # => #<Mechanize::Page::Link "Facebook" "http://www.facebook.com.br/depguilherme">
 		@twitter = page.link_with(:text => 'Twitter').uri.to_s if page.link_with(:text => 'Twitter')
 		# => #<Mechanize::Page::Link "Twitter" "http://www.twitter.com/depguilherme">

@@ -9,6 +9,7 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  uri_id     :integer
+#  twitter    :string(255)
 #
 
 require 'spec_helper'
