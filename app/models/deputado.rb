@@ -69,8 +69,8 @@ class Deputado < ActiveRecord::Base
 		# => #<Mechanize::Page::Link "Twitter" "http://www.twitter.com/depguilherme">
 
   	@deputado = Deputado.find_by_uri_id(uri_id) || Deputado.create(uri_id: uri_id)
-  	@deputado.facebook = @facebook if @facebook
-  	@deputado.save if @facebbok or @twitter
+  	@deputado.facebook = @facebook || ""
+  	@deputado.save
 
   	page
 		# => <Mechanize::Page::Link "dep.guilhermecampos@camara.leg.br" "mailto:dep.guilhermecampos@camara.leg.br">
