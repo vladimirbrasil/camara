@@ -17,10 +17,12 @@ ActiveRecord::Schema.define(:version => 20121127145217) do
     t.string   "nome"
     t.string   "email"
     t.string   "facebook"
+    t.integer  "uri_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.integer  "uri_id"
     t.string   "twitter"
   end
+
+  add_index "deputados", ["uri_id"], :name => "index_deputados_on_uri_id"
 
 end

@@ -24,6 +24,9 @@ class Deputado < ActiveRecord::Base
 
   require 'nokogiri'
   require 'mechanize'
+	require 'unicode'
+	require 'typhoeus'
+	require 'em-net-http'
 
   def self.iniciar_sessao
   	if @agent.nil?
@@ -46,12 +49,27 @@ class Deputado < ActiveRecord::Base
 	  
 	  select_list
 
+		# hydra = Typhoeus::Hydra.new
+
 	  # Deputado.captar_deputados
+	  # i = 0
 	  select_list.options.each do |value|
-	  	nome = /(.*?)\|/.match(value.to_s)[1].titlecase if /(.*?)\|/.match(value.to_s)
+	  	# i = i + 1
+	  	# if i > 10
+				# return select_list
+	  	# end
+	  	nome = Unicode::capitalize(/(.*?)\|/.match(value.to_s)[1]) if /(.*?)\|/.match(value.to_s)
 	  	uri_id = /\d*$/.match(value.to_s)[0].to_i if /\d*$/.match(value.to_s)
 
 	  	@deputado = Deputado.find_by_uri_id(uri_id) || Deputado.create(uri_id: uri_id, nome: nome)
+
+			# EM.run do
+			#   Fiber.new do
+	  #       self.captar_contatos_deputado(uri_id)
+			#     EM.stop_event_loop
+			#   end.resume
+			# end
+
 
 	  	self.captar_contatos_deputado(uri_id)
 	  end
@@ -70,20 +88,25 @@ class Deputado < ActiveRecord::Base
 	  page = @agent.get("#{url_dep}")
 
 	  @facebook = ""
+	  @twitter = ""
+	  @email = ""
+
 	  @facebook = page.link_with(:text => 'Facebook').uri.to_s if page.link_with(:text => 'Facebook')
-	  puts @facebook
 	  # => #<Mechanize::Page::Link "Facebook" "http://www.facebook.com.br/depguilherme">
 		@twitter = page.link_with(:text => 'Twitter').uri.to_s if page.link_with(:text => 'Twitter')
 		# => #<Mechanize::Page::Link "Twitter" "http://www.twitter.com/depguilherme">
+		@email = page.link_with(:href => /(.*)?@camara.leg.br$/).text if page.link_with(:href => /(.*)?@camara.leg.br$/)
+		# => <Mechanize::Page::Link "dep.guilhermecampos@camara.leg.br" "mailto:dep.guilhermecampos@camara.leg.br">
 
   	@deputado = Deputado.find_by_uri_id(uri_id) || Deputado.create(uri_id: uri_id)
   	@deputado.facebook = @facebook || ""
+  	@deputado.twitter = @twitter || ""
+  	@deputado.email = @email || ""
   	@deputado.save
 
   	page
-		# => <Mechanize::Page::Link "dep.guilhermecampos@camara.leg.br" "mailto:dep.guilhermecampos@camara.leg.br">
 
-
+		# results = Deputado.where("twitter <> ''").select([:twitter])
 
 
 	end

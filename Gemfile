@@ -11,9 +11,17 @@ gem 'pg', '>= 0.12.2'
 gem 'hirb'
 gem 'annotate', '>=2.5.0', group: :development
 
+gem 'typhoeus'
+gem 'ethon'
+
+gem 'em-net-http'
+
+gem 'unicode'
+
+
 group :development, :test do
  gem "rspec-rails", ">= 2.0.0"
- gem 'cucumber-rails', '>= 0.3.2', :require => false
+ # gem 'cucumber-rails', '>= 0.3.2', :require => false
  gem 'webrat', '>= 0.7.2'
  # gem 'capybara'
  # migrating from webrat to capybara:
