@@ -11,18 +11,26 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121127145217) do
+ActiveRecord::Schema.define(:version => 20121130005251) do
 
   create_table "deputados", :force => true do |t|
     t.string   "nome"
     t.string   "email"
     t.string   "facebook"
-    t.integer  "uri_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "uri_id"
     t.string   "twitter"
   end
 
-  add_index "deputados", ["uri_id"], :name => "index_deputados_on_uri_id"
+  create_table "senadors", :force => true do |t|
+    t.string   "nome"
+    t.string   "email"
+    t.string   "facebook"
+    t.string   "twitter"
+    t.integer  "uri_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
 end
